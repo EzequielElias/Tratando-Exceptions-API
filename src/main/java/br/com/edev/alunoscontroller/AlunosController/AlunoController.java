@@ -26,22 +26,16 @@ public class AlunoController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    // Listar todos os alunos sem parâmetros
+    // Encontrar aluno através do param nome
     @GetMapping
-    public List<Aluno> listarAlunos() {
-        return alunosService.ListarAlunos();
-    }
+    public List<Aluno> encontrarPorNome(@RequestParam(required = false) String nome, Integer id) {
+        if(nome != null) {
+            return alunosService.encontrarPorNome(nome);
 
-    // Encontrar aluno através do param nome >> localhost:8080/alunos/encontrarpornome
-    @GetMapping("/encontrarpornome")
-    public List<Aluno> encontrarPorNome(@RequestParam String nome) {
-        return alunosService.encontrarPorNome(nome);
-    }
-
-    // Encontrar aluno através do param id >> localhost:8080/alunos/encontrarporid
-    @GetMapping("/encontrarporid")
-    public List<Aluno> encontrarPorId(@RequestParam Integer id) {
-        return alunosService.encontrarPorid(id);
+        } else if(id != null) {
+            return alunosService.encontrarPorId(id);
+        }
+        return alunosService.listarAlunos();
     }
 
     // Deletar aluno pelo id > localhost:8080/deletaraluno={id}

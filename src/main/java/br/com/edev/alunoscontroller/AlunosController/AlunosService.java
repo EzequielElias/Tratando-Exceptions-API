@@ -36,6 +36,14 @@ public class AlunosService {
                                             HttpStatus.CREATED);
     }
 
+    public List<Aluno> listarAlunos() {
+
+        if(alunos.isEmpty()) {
+            throw new AlunoInexistenteException();
+        }
+        return alunos;
+    }
+
     // Editar aluno existente
     public void editarAluno(@RequestBody final Aluno aluno) {
 
@@ -49,42 +57,26 @@ public class AlunosService {
 
     }
 
-    // Listar todos os alunos sem parâmetros
-    public List<Aluno> ListarAlunos(){
-        return alunos;
-    }
-
     // Encontrar aluno através do parâmetro nome
     public List<Aluno> encontrarPorNome(String nome) {
+        List<Aluno> alunosEncontrados = new ArrayList<>(alunos.stream().filter(aln -> aln.getNome().contains(nome)).collect(Collectors.toList()));
 
-        if (nome != null) {
-
-            try {
-                return alunos.stream()
-                        .filter(aln -> aln.getNome().contains(nome))
-                        .collect(Collectors.toList());
-            } catch (AlunoInexistenteException e) {
-                throw new AlunoInexistenteException();
-            }
+        if(alunosEncontrados.isEmpty()) {
+            throw new AlunoInexistenteException();
         }
-        return alunos;
+        return alunosEncontrados;
     }
 
     //  Encontrar aluno através do parâmetro id
-    public List<Aluno> encontrarPorid(Integer id) {
+    public List<Aluno> encontrarPorId(int id) {
+        List<Aluno> alunosEncontrados = new ArrayList<>(alunos.stream().filter(aln -> aln.getId() == id).collect(Collectors.toList()));
 
-        if (id != null) {
-
-            try {
-                return alunos.stream()
-                        .filter(aln -> aln.getId().equals(id))
-                        .collect(Collectors.toList());
-            } catch (AlunoInexistenteException e) {
-                throw new AlunoInexistenteException();
-            }
+        if(alunosEncontrados.isEmpty()) {
+            throw new AlunoInexistenteException();
         }
-        return alunos;
+        return alunosEncontrados;
     }
+    
     // Deletar cadastro de aluno
     public ResponseEntity deletarAluno(Integer id) {
         alunos.removeIf(aln -> aln.getId().equals(id));
