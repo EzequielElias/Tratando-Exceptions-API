@@ -38,12 +38,4 @@ public class Aluno {
         this.id = id;
     }
 
-    public String toString(){
-        return this.getNome();
-    }
-
-    public Integer toNumero() {
-        return this.getId();
-    }
-
 }
